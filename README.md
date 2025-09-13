@@ -2,7 +2,7 @@
 This repo contains Content Addressable Storage implementation from scratch in Python.
 
 # Todo
-- [ ] In-memory CAS
+- [X] In-memory CAS
 - [ ] Persistent CAS
 - [ ] Chunk based storage for large files
 - [ ] CLI to interact with the CAS
