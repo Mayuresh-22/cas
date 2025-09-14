@@ -1,5 +1,9 @@
 from argparse import ArgumentParser, Namespace
 import os
+from pprint import pprint
+
+from utils.utils import if_file, load_file
+
 
 class CAS:
     def __init__(self, args: Namespace):
@@ -17,18 +21,28 @@ class CAS:
         while(True):
             command = input(f"{os.getpid()}> ").strip()
             command_parts = command.split(" ", 2)
-            if command_parts[0] == "put":
+            command = command_parts[0].lower()
+            if command == "put":
                 data = command_parts[1]
-                hash = self.cas.put(data)
-                print(hash)
-            elif command_parts[0] == "get":
+                if if_file(data):
+                    data = load_file(data)
+                if not data:
+                    print(None)
+                else:
+                    hash = self.cas.put(data)
+                    print(hash)
+            elif command == "get":
                 hash = command_parts[1]
                 data = self.cas.get(hash)
                 print(data)
-            elif command_parts[0] == "delete":
+            elif command == "delete":
                 hash = command_parts[1]
                 self.cas.delete(hash)
                 print("Ok")
+            elif command == "clear":
+                os.system("cls" if os.name == "nt" else "clear")
+            elif command == "exit":
+                exit(0)
 
 def main():
     parser = ArgumentParser(prog="CAS - Content Addressable Storage in Python")
