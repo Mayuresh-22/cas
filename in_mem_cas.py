@@ -3,6 +3,7 @@ Simple in-memory content addressable storage implementation.
 '''
 from hashlib import sha256
 
+
 class InMemoryCAS:
     def __init__(self):
         self.store = {}
