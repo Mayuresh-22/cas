@@ -1,0 +1,3 @@
+This basic implementation demonstrates the fundamental principles: identical content will always produce the same hash, and different content will always produce different hashes; the store automatically deduplicates content without any explicit logic.
+
+We now realize some problems of in-memory storage, such as limited space, since a typical computer has around 16-32GB of RAM, and we would expect far more space in a real-world application for a storage service, and we will lose all data when the power is off.
