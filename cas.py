@@ -1,4 +1,4 @@
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 import os
 from pprint import pprint
 
@@ -11,8 +11,10 @@ class CAS:
             from in_mem_cas import InMemoryCAS
             self.cas = InMemoryCAS()
         elif args.cas_type == "persistent":
-            print("Persistent CAS not implemented yet.")
-            exit(1)
+            from persistent_cas import PersistentCAS
+            self.cas = PersistentCAS()
+        else:
+            raise ArgumentTypeError("Invalid CAS type")
         
         self.start_cli()
 
