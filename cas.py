@@ -7,19 +7,23 @@ from utils.utils import if_file, load_file
 
 class CAS:
     def __init__(self, args: Namespace):
-        if args.cas_type == "in-mem":
+        self.args = args
+        if self.args.cas_type == "in-mem":
             from in_mem_cas import InMemoryCAS
             self.cas = InMemoryCAS()
-        elif args.cas_type == "persistent":
+        elif self.args.cas_type == "persistent":
             from persistent_cas import PersistentCAS
             self.cas = PersistentCAS()
+        elif self.args.cas_type == "chunk":
+            from chunk_based_cas import ChunkBasedCAS
+            self.cas = ChunkBasedCAS()
         else:
             raise ArgumentTypeError("Invalid CAS type")
         
         self.start_cli()
 
     def start_cli(self):
-        print("Starting CAS cli. Type 'put <data>', 'get <hash>', or 'delete <hash>'. Ctrl+C to exit.")
+        print(f"Starting {self.args.cas_type.capitalize()} CAS cli. Type 'put <data>', 'get <hash>', or 'delete <hash>'. Ctrl+C to exit.")
         while(True):
             command = input(f"{os.getpid()}> ").strip()
             command_parts = command.split(" ", 2)
@@ -27,7 +31,10 @@ class CAS:
             if command == "put":
                 data = command_parts[1]
                 if if_file(data):
-                    data = load_file(data)
+                    if  self.args.cas_type != "chunk":
+                        data = load_file(data)
+                    else: 
+                        data = data  # chunk-based cas expects file path
                 if not data:
                     print(None)
                 else:
@@ -50,7 +57,7 @@ def main():
     parser = ArgumentParser(prog="CAS - Content Addressable Storage in Python")
     parser.add_argument(
         "-ct", "--cas-type", 
-        type=str, choices=["in-mem", "persistent"], 
+        type=str, choices=["in-mem", "persistent", "chunk"], 
         default="in-mem", help="Type of CAS to use"
     )
     parser.add_argument(
