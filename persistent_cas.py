@@ -12,7 +12,7 @@ affects search and retrieval performance.
 
 # USAGE:
 # uv run .\cas.py -ct persistent
-# put ./temp/temp.pdf
+# put ./temp/temp.txt
 
 from hashlib import sha256
 from os import path
