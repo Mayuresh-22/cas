@@ -16,7 +16,7 @@ class CAS:
             self.cas = PersistentCAS()
         elif self.args.cas_type == "chunk":
             from chunk_based_cas import ChunkBasedCAS
-            self.cas = ChunkBasedCAS()
+            self.cas = ChunkBasedCAS(chunk_size=self.args.chunk_size)
         else:
             raise ArgumentTypeError("Invalid CAS type")
         
@@ -59,6 +59,10 @@ def main():
         "-ct", "--cas-type", 
         type=str, choices=["in-mem", "persistent", "chunk"], 
         default="in-mem", help="Type of CAS to use"
+    )
+    parser.add_argument(
+        "-cs", "--chunk-size",
+        type=int, default=100*1024, help="Chunk size in bytes (only for chunk-based CAS)"
     )
     parser.add_argument(
         "-hf", "--hash-function",

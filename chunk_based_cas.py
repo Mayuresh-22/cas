@@ -102,7 +102,7 @@ class ChunkBasedCAS:
             
             TODO: you've to implement it someday, but not today
         """
-        warning("Delete operation is not supported in ChunkBasedCAS")
+        warning("Delete operation is not supported in Chunk-Based CAS")
         return None
 
     def hash_to_path(self, hash: str, isMetadata: bool = False) -> str:
